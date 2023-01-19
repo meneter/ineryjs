@@ -1,0 +1,35 @@
+const Inery = require('inery');
+
+// EOSIO blockchain ağına bağlanmak için gerekli ayarlar
+const eos = Inery.local({
+  httpEndpoint: 'http://localhost:8888',
+  chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f',
+  keyProvider: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
+});
+
+// JSON-RPC işlemi için gerekli parametreler
+const params = {
+  actions: [{
+    account: 'eosio.token',
+    name: 'transfer',
+    authorization: [{
+      actor: 'user',
+      permission: 'active',
+    }],
+    data: {
+      from: 'user',
+      to: 'receiver',
+      quantity: '1.0000 EOS',
+      memo: 'example transfer',
+    },
+  }],
+};
+
+// JSON-RPC işlemi gönderme
+eos.rpc.send_transaction(params)
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
